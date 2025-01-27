@@ -1,20 +1,16 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+<ion-content class="ion-padding">
+  <div class="profile-selection">
+    <h1>Qui utilise ColocApp ?</h1>
+    <div class="profile-grid">
+      <div class="profile-button" *ngFor="let profile of profiles" (click)="selectProfile(profile)">
+        <div class="profile-image" [style.backgroundImage]="'url(' + profile.image + ')'">
+          <ion-icon name="person" *ngIf="!profile.image"></ion-icon>
+        </div>
+        <span class="profile-name">{{ profile.name }}</span>
+      </div>
+    </div>
+    <ion-button expand="block" (click)="manageProfiles()">
+      Gérer les profils
+    </ion-button>
   </div>
 </ion-content>
