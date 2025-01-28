@@ -19,7 +19,10 @@ export class CreateProfileModalComponent implements OnInit {
   newProfile: Profile = {
     id: 0,
     name: '',
-    image: ''
+    image: '',
+    tasks: [],
+    points: 0,
+    pin: ''
   };
   nameError: string | null = null;
 
@@ -42,24 +45,32 @@ export class CreateProfileModalComponent implements OnInit {
     this.modalController.dismiss(null, 'cancel');
   }
 
-  validateName() {
-    if (!this.newProfile.name || this.newProfile.name.trim() === '') {
-      this.nameError = "Le nom est requis.";
-      return false;
-    }
 
-     if (this.newProfile.name.length < 3) {
-      this.nameError = "Le nom doit contenir au moins 3 caractères.";
-      return false;
-    }
-     if (/\d/.test(this.newProfile.name)) { //recherche par pattern
-      this.nameError = "Le nom ne doit pas contenir de chiffres.";
-      return false;
-    }
+    validateName() {
+        if (!this.newProfile.name || this.newProfile.name.trim() === '') {
+            this.nameError = "Le nom est requis.";
+            return false;
+        }
+    
+        if (this.newProfile.name.length < 3) {
+        this.nameError = "Le nom doit contenir au moins 3 caractères.";
+        return false;
+        }
+        if (/\d/.test(this.newProfile.name)) {
+        this.nameError = "Le nom ne doit pas contenir de chiffres.";
+        return false;
+        }
 
-    this.nameError = null;
-    return true;
-  }
+        const profiles = this.profileService.getProfiles();
+        const isNameTaken = profiles.some(profile => profile.name === this.newProfile.name && profile.id !== this.newProfile.id);
+        if(isNameTaken){
+           this.nameError = "Ce nom de profil est déjà pris.";
+            return false;
+        }
+    
+        this.nameError = null;
+        return true;
+    }
 
   confirm(form: NgForm) {
     if (this.validateName() && form.valid) {
