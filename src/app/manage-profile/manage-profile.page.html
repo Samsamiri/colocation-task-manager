@@ -1,0 +1,40 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="" icon="chevron-back-outline"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Gérer les Profils</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="profiles-grid">
+    <ion-card *ngFor="let profile of profiles; let i = index" class="profile-card">
+      <div class="profile-image-container">
+        <ion-avatar>
+          <img [src]="profile.image" alt="{{ profile.name }}" />
+        </ion-avatar>
+        <div class="profile-actions">
+          <ion-button fill="clear" class="delete-btn">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+      <div class="profile-info">
+        <h3>{{ profile.name }}</h3>
+        <p>ID: {{ profile.id }}</p>
+      </div>
+
+      <ion-button expand="block" class="edit-btn" >
+        Modifier
+      </ion-button>
+    </ion-card>
+
+    <ion-card class="add-profile-card" >
+      <div class="add-profile-content">
+        <ion-icon name="add-circle-outline"></ion-icon>
+        <p>Ajouter un profil</p>
+      </div>
+    </ion-card>
+  </div>
+</ion-content>

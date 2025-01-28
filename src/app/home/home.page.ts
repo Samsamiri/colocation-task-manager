@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-
-interface Profile {
-  id: number
-  name: string
-  image?: string
-}
+import { Router } from '@angular/router';
+import { Profile } from '../models/profile.model';
+import { ProfileService } from '../services/profile.service';
 
 @Component({
   selector: 'app-home',
@@ -16,21 +13,20 @@ interface Profile {
   imports: [IonicModule, CommonModule],
 })
 export class HomePage {
-  
-  profiles: Profile[] = [
-    { id: 1, name: "Alice", image: "https://api.dicebear.com/9.x/micah/svg?seed=Alice&hair=full&shirtColor=ffdfbf&backgroundColor=ffd5dc" },
-    { id: 2, name: "Bob", image: "https://api.dicebear.com/9.x/micah/svg?seed=Bob&hair=mrT&shirtColor=c0aede&backgroundColor=b6e3f4" },
-    { id: 3, name: "Charlie", image: "https://api.dicebear.com/9.x/micah/svg?seed=Charlie&hair=pixie&shirtColor=d1d4f9&backgroundColor=ffedef" },
-    { id: 4, name: "David", image: "https://api.dicebear.com/9.x/micah/svg?seed=David&hair=dougFunny&shirtColor=f4d150&backgroundColor=e0ddff" },
-  ];
-  
-  constructor() {}
+
+  profiles: Profile[] = [];
+
+  constructor(private router: Router, private profileService: ProfileService) {}
+
+  ngOnInit() {
+    this.profiles = this.profileService.getProfiles();
+  }
 
   selectProfile(profile: Profile) {
     console.log(`Profil sélectionné : ${profile.name}`)
   }
 
   manageProfiles() {
-    console.log("Gérer les profils")
+    this.router.navigate(['/manage-profiles']);
   }
 }
