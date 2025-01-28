@@ -7,7 +7,7 @@ import { Profile } from '../models/profile.model';
 export class ProfileService {
     private profiles: Profile[] = [
       { id: 1, name: 'Alice', image: 'https://api.dicebear.com/9.x/micah/svg?seed=Alice' },
-      { id: 2, name: 'Bob', image: 'https://api.dicebear.com/9.x/micah/svg?seed=Bob' },
+      { id: 2, name: 'Bob', image:  'https://api.dicebear.com/9.x/micah/svg?seed=Bob' },
       { id: 3, name: 'Charlie', image: 'https://api.dicebear.com/9.x/micah/svg?seed=Charlie' },
       { id: 4, name: 'David', image: 'https://api.dicebear.com/9.x/micah/svg?seed=David' },
     ];
@@ -18,14 +18,19 @@ export class ProfileService {
     }
   
     addProfile(profile: Profile): void {
-      //todo
+      const newId = this.profiles.length > 0 ? Math.max(...this.profiles.map(p => p.id)) + 1 : 1;
+      profile.id = newId;
+      this.profiles.push(profile);
     }
   
-    updateProfile(index: number, updatedProfile: Profile): void {
-      //todo
+    updateProfile(updatedProfile: Profile): void {
+        const index = this.profiles.findIndex(p => p.id === updatedProfile.id);
+        if (index !== -1) {
+          this.profiles[index] = updatedProfile;
+        }
     }
   
     deleteProfile(index: number): void {
-      //todo
+      this.profiles.splice(index, 1);
     }
   }

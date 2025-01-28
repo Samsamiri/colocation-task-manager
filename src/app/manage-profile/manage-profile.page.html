@@ -15,7 +15,7 @@
           <img [src]="profile.image" alt="{{ profile.name }}" />
         </ion-avatar>
         <div class="profile-actions">
-          <ion-button fill="clear" class="delete-btn">
+          <ion-button fill="clear" class="delete-btn" (click)="deleteProfile(i)">
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
         </div>
@@ -25,12 +25,12 @@
         <p>ID: {{ profile.id }}</p>
       </div>
 
-      <ion-button expand="block" class="edit-btn" >
+      <ion-button expand="block" class="edit-btn" (click)="editProfile(i)">
         Modifier
       </ion-button>
     </ion-card>
 
-    <ion-card class="add-profile-card" >
+    <ion-card class="add-profile-card" (click)="openCreateModal()">
       <div class="add-profile-content">
         <ion-icon name="add-circle-outline"></ion-icon>
         <p>Ajouter un profil</p>

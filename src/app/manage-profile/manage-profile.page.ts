@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { Profile } from '../models/profile.model';
 import { ProfileService } from '../services/profile.service';
 import { FormsModule } from '@angular/forms';
+import { CreateProfileModalComponent } from '../Components/create-profile-modal/create-profile-modal.component';
 
 @Component({
   selector: 'app-manage-profile',
@@ -23,7 +24,10 @@ export class ManageProfilesPage implements OnInit {
   };
   editingIndex: number = -1;
 
-  constructor(private profileService: ProfileService) {}
+  constructor(
+    private profileService: ProfileService,
+    private modalController: ModalController
+  ) {}
 
   ngOnInit() {
     this.loadProfiles();
@@ -35,4 +39,41 @@ export class ManageProfilesPage implements OnInit {
     console.log('Profiles loaded:', this.profiles);
   }
 
+
+  async openCreateModal() {
+    const modal = await this.modalController.create({
+      component: CreateProfileModalComponent,
+    });
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    if (role === 'profileCreated') {
+      this.loadProfiles();
+    }
+  }
+
+  async deleteProfile(index: number) {
+      this.profileService.deleteProfile(index);
+      this.loadProfiles();
+  }
+
+
+  async editProfile(index: number) {
+    this.editingIndex = index;
+    this.currentProfile = { ...this.profiles[index] };
+    this.isEditing = true;
+    const modal = await this.modalController.create({
+      component: CreateProfileModalComponent,
+      componentProps: {
+        profile: this.currentProfile,
+        isEditing: true
+      }
+    });
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    if(role === 'profileEdited') {
+      this.loadProfiles();
+    }
+  }
 }

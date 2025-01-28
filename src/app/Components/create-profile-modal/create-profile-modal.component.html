@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ isEditing ? 'Modifier le profil' : 'Nouveau profil' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Annuler</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form #profileForm="ngForm" (ngSubmit)="confirm(profileForm)">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">Nom</ion-label>
+        <ion-input 
+           type="text" 
+           name="name" 
+           [(ngModel)]="newProfile.name" 
+           (ionChange)="generateImage()"
+           (ionBlur)="validateName()" 
+           placeholder="Entrez le nom du profil">
+        </ion-input>
+      </ion-item>
+      <ion-item *ngIf="nameError">
+        <ion-text color="danger">{{nameError}}</ion-text>
+      </ion-item>
+    </ion-list>
+    <ion-button expand="block" type="submit" [disabled]="!profileForm.valid || nameError">
+        {{ isEditing ? 'Modifier' : 'Créer' }}
+    </ion-button>
+  </form>
+</ion-content>
