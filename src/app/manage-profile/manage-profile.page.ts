@@ -20,7 +20,10 @@ export class ManageProfilesPage implements OnInit {
   currentProfile: Profile = {
     id: 0,
     name: '',
-    image: ''
+    image: '',
+    tasks: [],
+    points: 0,
+    pin: ''
   };
   editingIndex: number = -1;
 
