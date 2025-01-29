@@ -1,0 +1,105 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="" icon="chevron-back-outline"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Liste des Tâches</ion-title>
+       <ion-buttons slot="end">
+          <ion-button (click)="openProfileDetail()" *ngIf="profileId">
+            <ion-icon name="person-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="filter-section">
+    <div class="filter-chips profile-filters">
+      <div class="chip" [class.active]="!selectedProfile" (click)="selectedProfile = ''; filterTasks()">
+        <ion-icon name="people"></ion-icon>
+        <span>Tous</span>
+      </div>
+      <div class="chip" [class.active]="selectedProfile === 'me'" (click)="selectedProfile = 'me'; filterTasks()" *ngIf="profileId">
+        <ion-icon name="person"></ion-icon>
+        <span>Mes tâches</span>
+      </div>
+      <div class="chip" *ngFor="let profile of profiles" [class.active]="selectedProfile === profile.name" (click)="selectedProfile = profile.name; filterTasks()">
+        <ion-avatar>
+          <img [src]="profile.image || 'assets/default-avatar.png'" [alt]="profile.name">
+        </ion-avatar>
+        <span>{{profile.name}}</span>
+      </div>
+    </div>
+    <div class="filter-chips status-filters">
+        <div class="chip" [class.active]="selectedStatus === null" (click)="selectedStatus = null; filterTasks()">
+            <ion-icon name="list-outline"></ion-icon>
+            <span>Tous</span>
+        </div>
+          <div class="chip" [class.active]="selectedStatus === TaskStatus.TODO" (click)="selectedStatus = TaskStatus.TODO; filterTasks()">
+              <ion-icon name="radio-button-off-outline"></ion-icon>
+              <span>Todo</span>
+          </div>
+          <div class="chip" [class.active]="selectedStatus === TaskStatus.IN_PROGRESS" (click)="selectedStatus = TaskStatus.IN_PROGRESS; filterTasks()">
+              <ion-icon name="sync-outline"></ion-icon>
+              <span>En cours</span>
+          </div>
+           <div class="chip" [class.active]="selectedStatus === TaskStatus.DONE" (click)="selectedStatus = TaskStatus.DONE; filterTasks()">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              <span>Fait</span>
+          </div>
+      </div>
+  </div>
+
+  <div class="tasks-container">
+    <ion-card *ngFor="let task of tasks" class="task-card">
+      <ion-card-content>
+        <div class="task-header">
+          <div class="task-title">
+            <h2>{{ task.title }}</h2>
+            <div class="points">
+              <ion-icon name="star" color="warning"></ion-icon>
+              <span>{{ task.points }}</span>
+            </div>
+          </div>
+          <div class="task-status" [class]="task.status.toLowerCase()">
+            {{ task.status }}
+          </div>
+        </div>
+
+        <p class="task-description">{{ task.description }}</p>
+
+        <div class="task-footer">
+          <div class="assigned-to">
+            <ion-avatar *ngIf="task.assignedTo">
+              <img [src]="getProfileAvatar(task.assignedTo)" [alt]="task.assignedTo">
+            </ion-avatar>
+            <span>{{ task.assignedTo || 'Non assigné' }}</span>
+          </div>
+
+          <div class="actions">
+            <ion-button 
+              *ngIf="!task.assignedTo && profileId"
+              fill="outline"
+              color="primary"
+              size="small"
+              class="assign-btn"
+              (click)="assignTask(task)">
+              <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+              S'affecter
+            </ion-button>
+            
+            <ion-button 
+              *ngIf="task.status !== TaskStatus.DONE && isTaskAssignedToCurrentUser(task)"
+              color="success"
+              size="small"
+              class="done-btn"
+              (click)="markTaskAsDone(task)">
+              <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+              Fait
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
