@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'colocation.task.manager',
+  appId: 'com.example.app',
   appName: 'colocation-task-manager',
   webDir: 'www'
 };
