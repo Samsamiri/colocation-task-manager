@@ -31,7 +31,7 @@ export class HomePage implements OnInit {
 
   selectProfile(profile: Profile) {
     console.log('Selected profile:', profile);
-    // todo
+     this.router.navigate(['/task-list', profile.id]);
   }
 
   manageProfiles() {
