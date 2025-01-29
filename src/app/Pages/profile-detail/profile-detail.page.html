@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text="" icon="chevron-back-outline" (click)="goBack()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Détail du Profil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" *ngIf="profile">
+  <div class="profile-container">
+    <div class="profile-header">
+      <ion-avatar class="profile-avatar">
+        <img [src]="profile.image" [alt]="profile.name">
+      </ion-avatar>
+      <h1 class="profile-name">{{ profile.name }}</h1>
+    </div>
+
+    <div class="stats-container">
+      <div class="stat-card">
+        <ion-icon name="list-outline" class="stat-icon"></ion-icon>
+        <div class="stat-content">
+          <span class="stat-value">{{ numberOfTasks !== null ? numberOfTasks : '0' }}</span>
+          <span class="stat-label">Tâches attribuées</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <ion-icon name="star-outline" class="stat-icon"></ion-icon>
+        <div class="stat-content">
+          <span class="stat-value">{{profile.points}}</span>
+          <span class="stat-label">Points</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <ion-icon name="key-outline" class="stat-icon"></ion-icon>
+        <div class="stat-content">
+          <span class="stat-value">{{profile.pin}}</span>
+          <span class="stat-label">Code PIN</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

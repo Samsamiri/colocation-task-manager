@@ -4,6 +4,11 @@
       <ion-back-button defaultHref="/home" text="" icon="chevron-back-outline"></ion-back-button>
     </ion-buttons>
     <ion-title>Liste des Tâches</ion-title>
+       <ion-buttons slot="end">
+          <ion-button (click)="openProfileDetail()" *ngIf="profileId">
+            <ion-icon name="person-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
