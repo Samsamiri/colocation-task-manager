@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { TaskService } from '../services/task.service';
-import { Task, TaskStatus } from '../models/task.model';
-import { ProfileService } from '../services/profile.service';
-import { Profile } from '../models/profile.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TaskService } from '../../services/task.service';
+import { Task, TaskStatus } from '../../models/task.model';
+import { ProfileService } from '../../services/profile.service';
+import { Profile } from '../../models/profile.model';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
@@ -26,7 +26,8 @@ export class TaskListPage implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private taskService: TaskService,
-        private profileService: ProfileService
+        private profileService: ProfileService,
+        private router: Router
     ) { }
 
     ngOnInit() {
@@ -117,4 +118,11 @@ export class TaskListPage implements OnInit {
     const profile = this.profiles.find(p => p.name === name);
     return profile?.image || 'assets/default-avatar.png';
   }
+
+  openProfileDetail() {
+    if(this.profileId) {
+        this.router.navigate(['/profile-detail', this.profileId]);
+    }
+}
+  
 }

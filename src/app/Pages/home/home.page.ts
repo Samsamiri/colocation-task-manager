@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Profile } from '../models/profile.model';
-import { ProfileService } from '../services/profile.service';
+import { Profile } from '../../models/profile.model';
+import { ProfileService } from '../../services/profile.service';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 

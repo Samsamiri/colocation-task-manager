@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { Profile } from '../models/profile.model';
-import { ProfileService } from '../services/profile.service';
+import { Profile } from '../../models/profile.model';
+import { ProfileService } from '../../services/profile.service';
 import { FormsModule } from '@angular/forms';
-import { CreateProfileModalComponent } from '../Components/create-profile-modal/create-profile-modal.component';
+import { CreateProfileModalComponent } from '../../Components/create-profile-modal/create-profile-modal.component';
 
 @Component({
   selector: 'app-manage-profile',
