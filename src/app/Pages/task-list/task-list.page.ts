@@ -7,6 +7,8 @@ import { Profile } from '../../models/profile.model';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { LocalNotifications } from '@capacitor/local-notifications';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
     selector: 'app-task-list',
@@ -30,13 +32,28 @@ export class TaskListPage implements OnInit {
         private router: Router
     ) { }
 
-    ngOnInit() {
-        this.route.params.subscribe(params => {
-            this.profileId = params['id'] ? +params['id'] : null;
-            this.loadTasks();
-            this.loadProfiles();
-        });
-    }
+    async ngOnInit() {
+      this.route.params.subscribe(params => {
+          this.profileId = params['id'] ? +params['id'] : null;
+          this.loadTasks();
+          this.loadProfiles();
+      });
+        await this.requestPermissions();
+  }
+
+  async requestPermissions() {
+      if (Capacitor.getPlatform() !== 'web') {
+           let perm = await LocalNotifications.checkPermissions();
+          if(perm.display !== 'granted'){
+            perm = await LocalNotifications.requestPermissions();
+          }
+         console.log(perm);
+         if(perm.display !== 'granted'){
+             console.log('permission not granted')
+          }
+          
+      }
+  }
 
     loadTasks() {
         this.tasks = this.taskService.getTasks();
@@ -89,21 +106,37 @@ export class TaskListPage implements OnInit {
       }
   }
 
-  markTaskAsDone(task: Task) {
+  async markTaskAsDone(task: Task) {
       if (this.profileId) {
           const profile = this.profiles.find(p => p.id === this.profileId);
           if (profile) {
               const taskIndex = this.tasks.findIndex(t => t.id === task.id);
-              if (taskIndex !== -1 && this.tasks[taskIndex].assignedTo === profile.name) {
+              if (taskIndex !== -1 && this.tasks[taskIndex].assignedTo === profile.name && this.tasks[taskIndex].status === TaskStatus.IN_PROGRESS) {
+                  
                 this.tasks[taskIndex] = { ...this.tasks[taskIndex], status: TaskStatus.DONE };
                 this.taskService.updateTask(taskIndex, this.tasks[taskIndex]);
-                   profile.points += task.points;
-                  this.profileService.updateProfile(profile);
+                profile.points += task.points;
+                this.profileService.updateProfile(profile);
+                   this.sendCongratsNotification(task.points);
               }
               this.filterTasks();
             }
       }
     }
+
+    async sendCongratsNotification(points: number) {
+        await LocalNotifications.schedule({
+          notifications: [
+            {
+              title: `Félicitations !`,
+              body: `Vous avez gagné ${points} points !`,
+              id: 1,
+                schedule: { at: new Date(Date.now() + 1000) },
+            },
+          ],
+        });
+    }
+
 
     isTaskAssignedToCurrentUser(task: Task): boolean {
       if (!this.profileId || !task.assignedTo) {
